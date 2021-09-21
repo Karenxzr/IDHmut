@@ -150,9 +150,12 @@ def tiling_qualified_separate_10x(svspath,targetpath,tilesize,stride, tissuepct_
                 np.save(filename, tile)
     slide.close()
 
+
     
 def tiling_qualified_separate_20x(svspath,targetpath,tilesize,stride, tissuepct_value=0.8,  h_factor=2,offset=0):
-    
+    """
+    tiling WSI based on fixed threshold, tiling 20x specifically
+    """
     np.seterr(all='ignore')
     slide = openslide.open_slide(svspath)
     m = round(float(slide.properties['aperio.MPP']), 2) // 0.25
