@@ -151,8 +151,8 @@ def tiling_qualified_separate_10x(svspath,targetpath,tilesize,stride, tissuepct_
     slide.close()
 
     
-def tiling_qualified_separate_20x(svspath,targetpath,tilesize,stride, tissuepct_value=0.8,  h_factor=2,
-                                  offset=0):
+def tiling_qualified_separate_20x(svspath,targetpath,tilesize,stride, tissuepct_value=0.8,  h_factor=2,offset=0):
+    
     np.seterr(all='ignore')
     slide = openslide.open_slide(svspath)
     m = round(float(slide.properties['aperio.MPP']), 2) // 0.25
