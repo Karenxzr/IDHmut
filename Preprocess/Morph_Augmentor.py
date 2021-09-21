@@ -2,8 +2,7 @@ import numpy as np
 import random
 import math
 import manage 
-import colornormalization as CN
-from PIL import Image
+import coloraugmentation as CN
 
 
 
