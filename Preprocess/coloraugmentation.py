@@ -1,4 +1,4 @@
-# Color Normalization and augmentation'
+# Color Augmentation'
 import numpy as np
 
 def rgb2hsv(rgb):
