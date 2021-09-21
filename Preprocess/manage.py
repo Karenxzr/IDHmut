@@ -52,17 +52,23 @@ def list_npy(rootfolder,wholepath= True):
     return path
 
 def Barcode(string):
+    '''
+    used to extract Barcode for TCGA data
+    '''
     pattern = re.compile(r'(TCGA-.{2}-.{4})')
     barcode = re.search(pattern, string).group(1)
     return barcode
 
 def DX(string):
-    pattern = re.compile(r'-DX(\d)\.')
+    '''
+    used to extract slide number for TCGA data
+    '''
+    pattern = re.compile(r'-DX(\w|\d+)-')
     dx = re.search(pattern, string).group(1)
     return dx
 
 def DX_(string):
-    pattern = re.compile(r'_DX(\d).')
+    pattern = re.compile(r'_DX(\d|\w)_')
     dx = re.search(pattern, string).group(1)
     return dx
 
@@ -77,26 +83,3 @@ def Coordinates(string):
     y = re.search(pattern, string).group(2)
     return int(x), int(y)
 
-def Fold_Image(image,num_w,num_h,tissue_pct=0):
-    '''
-    :input image numpy
-    :param fold image into 4d array. when tissue_pct, no filter will be used
-    :return: 4d folded array
-    '''
-    image_w=image.shape[1]
-    image_h=image.shape[0]
-    tile_w = int(image_w/num_w)
-    tile_h = int(image_h/num_h)
-    out = []
-    for w in range(num_w):
-        for h in range(num_h):
-            sub_img = image[h*tile_h:(h+1)*tile_h,w*tile_w:(w+1)*tile_w,:]
-            if tissue_pct==0:
-                out.append(sub_img)
-            else:
-                if filter.tissue_pct>=tissue_pct:
-                    out.append(sub_img)
-                else:
-                    pass
-    out = np.stack(out)
-    return out
