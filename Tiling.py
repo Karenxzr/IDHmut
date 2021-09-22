@@ -4,7 +4,7 @@ import pandas as pd
 import os
 import re
 from multiprocessing import Pool
-import manage
+from Preprocess import manage
 
 
 parser = argparse.ArgumentParser(description = 'Tiling SVS Files into Patches')
