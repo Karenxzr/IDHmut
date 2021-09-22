@@ -23,4 +23,4 @@ Some optional arguments:
 
 Example command: (will tile 2.5x patches with tissue percentage over 50%)
 
-`python3 Tiling.py --df_path '/path/to/csv/file.csv' --target_path '/root/folder/path/for/tiles' ` --tissuepct_value 0.5 --magnification '2.5x'
+`python3 Tiling.py --df_path '/path/to/csv/file.csv' --target_path '/root/folder/path/for/tiles'  --tissuepct_value 0.5 --magnification '2.5x'`
