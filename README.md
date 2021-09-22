@@ -1,5 +1,7 @@
 # IDHmut
-![alt text](/Figures/Picture1.png)
+<p align="center">
+  <img src="/Figures/Picture1.png" width="350" title="workflow">
+</p>
 
 ## 1. Tiling Slides
 The first step is to tile slides into patches and store patches into specified folder. A csv file with two columns ('SVS_Path','PatientID') is required to store svs file paths and IDs. See csv folder for example file for --df_path argument.
