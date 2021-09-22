@@ -22,6 +22,7 @@ def tiling(svspath,patientid,targetpath,tilesize=256,stride=256,tissuepct_value=
     """
     :param magnification:single magnification from ['2.5x','5x','10x','20x']
     """
+    
     if magnification is not None:
         assert (
           magnification.lower() in ['2.5x','5x','10x','20x']
