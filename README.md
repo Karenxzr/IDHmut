@@ -21,3 +21,6 @@ Some optional arguments:
 
 '--magnification',type=str,default=None (when leave it as default 2.5x, 5x,10x,20x will all be tiled, otherwise assign one target magnification)
 
+Example command: (will tile 2.5x patches with tissue percentage over 50%)
+
+`python3 Tiling.py --df_path '/path/to/csv/file.csv' --target_path '/root/folder/path/for/tiles' ` --tissuepct_value 0.5 --magnification '2.5x'
