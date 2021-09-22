@@ -16,21 +16,20 @@ parser.add_argument('--workers',type=int,default=8)
 parser.add_argument('--tilesize',type=int,default=256)
 parser.add_argument('--stride',type=int,default=256)
 parser.add_argument('--tissuepct_value',type=int,default=0.7)
-parser.add_argument('--magnification',action="store")
-_StoreAction(option_strings=['-m', '--magnification'], dest='magnification', nargs='*', const=None, default=None, type=None, choices=None, metavar=None)
+parser.add_argument('--magnification',type=str, default = 'multi')
 
-def tiling(svspath,patientid,targetpath,tilesize=256,stride=256,tissuepct_value=0.7,magnification=None):
+def tiling(svspath,patientid,targetpath,tilesize=256,stride=256,tissuepct_value=0.7,magnification='multi'):
     """
     :param magnification:single magnification from ['2.5x','5x','10x','20x']
     """
     
-    if magnification is not None:
+    if magnification=='multi':
+        mag =  ['2.5x','5x','10x','20x']
+    else:
         assert (
           magnification.lower() in ['2.5x','5x','10x','20x']
         ),f"invalid magnification, choose from ['2.5x','5x','10x','20x']"
         mag =  [magnification.lower()]
-    else:
-        mag =  ['2.5x','5x','10x','20x']
     
     print('tiling on magnifications of'+str(mag))
     
@@ -71,12 +70,13 @@ def main():
     svs_paths = list(df['SVS_Path'])
     patientid = list(df['PatientID'])
     
+    
     iter_object=[]
     for ind in range(len(svs_paths)):
         svs = svs_paths[ind]
         patient_id = patientid[ind]
         # create iter object
-        iter_object.append((svs, patient_id ,args.target_path))
+        iter_object.append((svs, patient_id ,args.target_path,args.tilesize,args.stride,args.tissuepct_value,args.magnification))
 
     #start task
     p.starmap(tiling, iter(iter_object))
