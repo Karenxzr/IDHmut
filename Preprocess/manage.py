@@ -1,7 +1,7 @@
 import os
 import re
 import numpy as np
-import filter
+from Preprocess import filter
 
 def list_svs(rootfolder,wholepath= True):
     '''
