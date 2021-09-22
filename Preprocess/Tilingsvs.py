@@ -150,7 +150,7 @@ def tiling_qualified_separate_10x(svspath,targetpath,tilesize,stride, tissuepct_
                 np.save(filename, tile)
     slide.close()
 
-def tiling_qualified_separate_20x(svspath,targetpath,tilesize,stride, tissuepct_value=0.8):
+def tiling_qualified_separate_20x(svspath,targetpath,tilesize,stride, tissuepct_value=0.8, offset=0):
     """
     tiling WSI based on fixed threshold, tiling 20x specifically
     """
