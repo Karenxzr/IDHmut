@@ -1,7 +1,7 @@
 # IDHmut
 
 ## 1. Tiling Slides
-The first step is to tile slides into patches and store patches into specified folder. A csv file with two columns ('SVS_Path','PatientID') is required to store svs file paths and IDs.
+The first step is to tile slides into patches and store patches into specified folder. A csv file with two columns ('SVS_Path','PatientID') is required to store svs file paths and IDs. See csv folder for example file for --df_path argument.
 
 User has to assign two arguments: --df_path and --target_path
 
@@ -27,6 +27,8 @@ Example command: (will tile 2.5x patches with tissue percentage over 50%)
 
 
 ## 2. Training Model
+
+After tiling the slides, we can start training models.
 
 `python3 Train.py --result_dir ‘/path/for/model’ --df_path ‘/path/to/metadata.csv’ --workers 16 --CNN densenet --no_age --patch_n 200 --spatial_sample_off --n_epoch 100 --lr 0.00001 --optimizer Adam --use_scheduler --balance 0.5 --balance_training --freeze_batchnorm --pooling mean --notes model0`
 
