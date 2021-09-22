@@ -28,7 +28,35 @@ Example command: (will tile 2.5x patches with tissue percentage over 50%)
 
 ## 2. Training Model
 
-After tiling the slides, we can start training models. A csv file for --df_path is also required. Example can be found in csv folder with name of training.csv. Basically, three columns are required: 1. label column, use --y_col to assign label name; 2. 'Path': paths for storing all tiles from each slide; 3. 'Train_Test': containing values of 'Train'/'Validation'/'Test'. Train and Validation are required.
+After tiling the slides, we can start training models. 
+
+Prepare a csv file for --df_path is required. Example can be found in csv folder with name of training.csv. Basically, three columns are required: 1. label column, use --y_col to assign label name; 2. 'Path': paths for storing all tiles from each slide; 3. 'Train_Test': containing values of 'Train'/'Validation'/'Test'. Train and Validation are required.
+
+Some important arguments:
+
+'--result_dir', type=str': folder path for save model
+
+'--df_path': path to meta data
+
+'--gpu': at least two gpus are required, default is '0,1,2,3'
+
+'--patch_n': patch number to sample for each slide during each iteration 
+
+'--balance': weights for balancing loss function for each class; default is 0.5. If weighting loss function for class imbalancement, --balance_training_off is suggested
+
+'--balance_training': used to balance class imbalancement during training. Will automatically sample the same number of samples for each class. Suggest leaving --balance as default
+
+'--CNN' choose from resnet and densenet
+
+'--y_col' label name shown in csv file
+
+'--freeze_batchnorm' suggest to set this for more stable results
+
+'--pooling': select from attention, max and mean for aggregating embedding layers of tiles from one slide
+
+'--A' if set pooling as attention, set a number to A for number of nodes in attention network. Default is 16.
+
+Example Codes:
 
 `python3 Train.py --result_dir ‘/path/for/model’ --df_path ‘/path/to/metadata.csv’ --workers 16 --CNN densenet --no_age --patch_n 200 --spatial_sample_off --n_epoch 100 --lr 0.00001 --optimizer Adam --use_scheduler --balance 0.5 --balance_training --freeze_batchnorm --pooling mean --notes model0`
 
