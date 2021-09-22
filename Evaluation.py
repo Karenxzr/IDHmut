@@ -1,18 +1,18 @@
 import torch
-import DataLoader_torch
+from Model import DataLoader_torch
 import pandas as pd
 import argparse
 import re
 import numpy as np
 import os
-import Model_Evaluation as ME
+from Model import Model_Evaluation as ME
 from sklearn.metrics import accuracy_score, roc_auc_score
 import torch.nn.functional as F
 
 parser = argparse.ArgumentParser(description='Evaluate Model')
 #required to set
 parser.add_argument('--gpu', type=str, default='0,1,2,3')
-parser.add_argument('--df_path', type=str, default='/home/gid-xuz/csv/ForTestModel.csv')
+parser.add_argument('--df_path', type=str)
 parser.add_argument('--Model_Folder', type=str)
 parser.add_argument('--action',type=str,default='summary')#choose from summary: save model performance as csv/ patch: save patch prediction as csv
 parser.add_argument('--by', type=str, default='loss')
@@ -24,7 +24,7 @@ parser.add_argument('--repeat',type=int,default=1)#repeat how many times of eval
 parser.add_argument('--patch_n',type=int,default=0)#how many patches each evaluation, 0: all patches
 
 #set if action is patch
-parser.add_argument('--row_slice',type=int,default=-1)
+parser.add_argument('--row_slice',type=int,default=-1)#set to -1 for all rows otherwise will evaluate specific row
 parser.add_argument('--key_word',type=str,default='Test')#set to 'All' if evaluating the whole dataframe
 parser.add_argument('--light_mode', action="store_true")#set light mode when oom to make patch only predictions
 parser.add_argument('--light_mode_off',dest='light_mode',action='store_false')
@@ -33,7 +33,7 @@ parser.add_argument('--light_mode_off',dest='light_mode',action='store_false')
 parser.add_argument('--no_age',  action='store_true')
 parser.add_argument('--add_age', dest='no_age', action='store_false')#concatenate age on embedding
 
-# set true if using 10X
+# set true if for two forward if oom
 parser.add_argument('--two_forward', action="store_true")
 parser.add_argument('--two_forward_off',dest='two_forward',action='store_false')
 
