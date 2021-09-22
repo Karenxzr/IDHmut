@@ -28,4 +28,4 @@ Example command: (will tile 2.5x patches with tissue percentage over 50%)
 
 ## 2. Training Model
 
-`python3 Train.py --result_dir ‘/path/for/model’ --df_path ‘/path/to/metadata.csv’ --workers 16 --CNN densenet --patch_n 200 --spatial_sample_off --n_epoch 100 --lr 0.00001 --optimizer Adam --use_scheduler --balance 0.5 --balance_training --freeze_batchnorm --pooling mean --notes model0`
+`python3 Train.py --result_dir ‘/path/for/model’ --df_path ‘/path/to/metadata.csv’ --workers 16 --CNN densenet --no_age --patch_n 200 --spatial_sample_off --n_epoch 100 --lr 0.00001 --optimizer Adam --use_scheduler --balance 0.5 --balance_training --freeze_batchnorm --pooling mean --notes model0`
