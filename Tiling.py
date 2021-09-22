@@ -31,6 +31,8 @@ def tiling(svspath,patientid,targetpath,tilesize=256,stride=256,tissuepct_value=
     else:
         mag =  ['2.5x','5x','10x','20x']
     
+    print('tiling on magnifications of'+str(mag))
+    
     if '2.5x' in mag:
         patch_path2_5x = os.path.join(targetpath, '2_5x', patientid)
         if not os.path.isdir(patch_path2_5x):
