@@ -28,7 +28,7 @@ Example command: (will tile 2.5x patches with tissue percentage over 50%)
 
 ## 2. Training Model
 
-After tiling the slides, we can start training models.
+After tiling the slides, we can start training models. A csv file for --df_path is also required. Example can be found in csv folder with name of training.csv. Basically, three columns are required: 1. label column, use --y_col to assign label name; 2. 'Path': paths for storing all tiles from each slide; 3. 'Train_Test': containing values of 'Train'/'Validation'/'Test'. Train and Validation are required.
 
 `python3 Train.py --result_dir ‘/path/for/model’ --df_path ‘/path/to/metadata.csv’ --workers 16 --CNN densenet --no_age --patch_n 200 --spatial_sample_off --n_epoch 100 --lr 0.00001 --optimizer Adam --use_scheduler --balance 0.5 --balance_training --freeze_batchnorm --pooling mean --notes model0`
 
