@@ -7,7 +7,7 @@ User has to assign two arguments: --df_path and --target_path
 
 Example command:
 
-`python3 Tiling.py --df_path '/path/to/csv/file.csv' --target_path '/root/folder/path/for/tiles' `
+`python3 Tiling.py --df_path '/path/to/csv/tilingslides.csv' --target_path '/root/folder/path/for/tiles' `
 
 Some optional arguments:
 
@@ -58,7 +58,7 @@ Some important arguments:
 
 Example Codes:
 
-`python3 Train.py --result_dir ‘/path/for/model’ --df_path ‘/path/to/metadata.csv’ --workers 16 --CNN densenet --no_age --patch_n 200 --spatial_sample_off --n_epoch 100 --lr 0.00001 --optimizer Adam --use_scheduler --balance 0.5 --balance_training --freeze_batchnorm --pooling mean --notes model0`
+`python3 Train.py --result_dir ‘/path/for/model’ --df_path ‘/path/to/training.csv’ --workers 16 --CNN densenet --no_age --patch_n 200 --spatial_sample_off --n_epoch 100 --lr 0.00001 --optimizer Adam --use_scheduler --balance 0.5 --balance_training --freeze_batchnorm --pooling mean --notes model0`
 
 ## 3. Evaluate Model
 `python3 Evaluation.py`
