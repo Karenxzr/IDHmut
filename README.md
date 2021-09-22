@@ -1,7 +1,7 @@
 # IDHmut
 
 ## 1. Tiling Slides
-The first step is to tiling slides into patches and store patches into specified folder. A csv file with two columns ('SVS_Path','PatientID') is required to store svs file paths and IDs.
+The first step is to tile slides into patches and store patches into specified folder. A csv file with two columns ('SVS_Path','PatientID') is required to store svs file paths and IDs.
 
 User has to assign two arguments: --df_path and --target_path
 
