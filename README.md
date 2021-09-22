@@ -19,7 +19,7 @@ Some optional arguments:
 
 '--tissuepct_value',type=int,default=0.7 (for quality control)
 
-'--magnification',type=str,default=None (when leave it as default 2.5x, 5x,10x,20x will all be tiled, otherwise assign one target magnification)
+'--magnification',type=str,default='multi' (when leave it as default 2.5x, 5x,10x,20x will all be tiled, otherwise assign one target magnification)
 
 Example command: (will tile 2.5x patches with tissue percentage over 50%)
 
