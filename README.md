@@ -6,6 +6,7 @@ The first step is to tiling slides into patches and store patches into specified
 User has to assign two arguments: --df_path and --target_path
 
 Example command:
+
 `python3 Tiling.py --df_path '/path/to/csv/file.csv' --target_path '/root/folder/path/for/tiles' `
 
 Some optional arguments:
