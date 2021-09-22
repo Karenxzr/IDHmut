@@ -1,7 +1,7 @@
 import numpy as np
 import openslide
 import math
-import filter
+from Preprocess import filter
 from skimage.transform import resize,rescale
 import os
 
