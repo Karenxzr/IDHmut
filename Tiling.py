@@ -17,6 +17,7 @@ parser.add_argument('--tilesize',type=int,default=256)
 parser.add_argument('--stride',type=int,default=256)
 parser.add_argument('--tissuepct_value',type=int,default=0.7)
 parser.add_argument('--magnification',action="store")
+_StoreAction(option_strings=['-m', '--magnification'], dest='magnification', nargs='*', const=None, default=None, type=None, choices=None, metavar=None)
 
 def tiling(svspath,patientid,targetpath,tilesize=256,stride=256,tissuepct_value=0.7,magnification=None):
     """
