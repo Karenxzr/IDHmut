@@ -13,6 +13,7 @@ parser = argparse.ArgumentParser(description='Evaluate Model')
 #required to set
 parser.add_argument('--gpu', type=str, default='0,1,2,3')
 parser.add_argument('--df_path', type=str)
+parser.add_argument('--y_col',type = str, default='IDH')
 parser.add_argument('--Model_Folder', type=str)
 parser.add_argument('--action',type=str,default='summary')#choose from summary: save model performance as csv/ patch: save patch prediction as csv
 parser.add_argument('--by', type=str, default='loss')
@@ -263,7 +264,8 @@ def main():
                               two_forward=args.two_forward,repeat=args.repeat,withage=withage)
         df.to_csv(os.path.join(args.Model_Folder, 'slideprediction' + str(args.by)+str(args.notes)+'.csv'))
     elif args.action=='patch':
-        df = ME.save_patch_prediction_to_dataframe(args.Model_Folder, args.df_path,by=args.by,row_slice = args.row_slice,key_word=args.key_word,y_col='IDH',light_mode=args.light_mode)
+        df = ME.save_patch_prediction_to_dataframe(args.Model_Folder, args.df_path,by=args.by,row_slice = args.row_slice,
+                                                   key_word=args.key_word,y_col=args.y_col,light_mode=args.light_mode)
         df.to_csv(os.path.join(args.Model_Folder, 'patchprediction' + str(args.by)+str(args.notes)+'.csv'))
         df.to_pickle(os.path.join(args.Model_Folder, 'patchprediction' + str(args.by)+str(args.notes)+'.pkl'))
 
