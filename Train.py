@@ -1,5 +1,5 @@
-import DataLoader_torch
-import Attention_Model_torch_sep
+from Model import DataLoader_torch
+from Model import Models 
 from collections import OrderedDict
 import argparse
 import os
@@ -20,8 +20,8 @@ parser.add_argument('--df_path', type=str, default='/home/gid-xuz/csv/Image_IDH_
 parser.add_argument('--gpu', type=str, default='0,1,2,3')
 parser.add_argument('--color',action='store_true')
 parser.add_argument('--color_off',dest='color',action='store_false')
-parser.add_argument('--A', type=int, default=64,help='node number for attention')
-parser.add_argument('--balance', default=0.25, type=float,
+parser.add_argument('--A', type=int, default=16,help='node number for attention')
+parser.add_argument('--balance', default=0.5, type=float,
                     help='unbalanced positive class weight (default: 0.5, balanced classes)')
 parser.add_argument('--lr', type=float, default=0.0001)
 parser.add_argument('--weight_decay', type=float, default=0.0001)
@@ -37,8 +37,6 @@ parser.add_argument('--spatial_sample_off', dest='spatial_sample', action='store
 parser.add_argument('--no_age',  action='store_true')
 parser.add_argument('--add_age', dest='no_age', action='store_false')#concatenate age on embedding
 parser.add_argument('--notes',type=str,default='')
-parser.add_argument('--positive_n', type=int, default=1)
-parser.add_argument('--negative_n', type=int, default=1)
 parser.add_argument('--balance_training',action='store_true')
 parser.add_argument('--balance_training_off',action='store_false',dest='balance_training')
 parser.add_argument('--freeze',type=int,default=0,help='layer number to freeze')
@@ -47,29 +45,11 @@ parser.add_argument('--pretrain',type=str, default='imagenet',help = 'put pretra
 parser.add_argument('--use_scheduler',action='store_true')
 parser.add_argument('--use_scheduler_off',dest='use_scheduler',action='store_false')
 parser.add_argument('--freeze_batchnorm',action='store_true')
+parser.add_argument('--freeze_batchnorm_off',action='store_false',dest='freeze_batchnorm')
 parser.add_argument('--freeze_CNN_model',action='store_true')
 parser.add_argument('--freeze_CNN_model_off',dest = 'freeze_CNN_model',action='store_false')
-parser.add_argument('--freeze_batchnorm_off',action='store_false',dest='freeze_batchnorm')
-#pyramid
-parser.add_argument('--loader_mode',type=str,default='classification', help='set to pyramid for zoom in, set to weights '
-                                                                            'for weigted sampling')
-#parser.add_argument('--attention',type=str,default = None,help='set to attention numpy list address if any')
-#parser.add_argument('--mode',type=str,default = 'low')
-#parser.add_argument('--top_n',type=int,default = 10)
-#weighted sampling
-#set loader_mode to weights and patch_n
-parser.add_argument('--dataframe_weight_path',type=str,default = 'data/attention_df.csv')
-parser.add_argument('--subfolderdict',type=str,default = '/home/gid-xuz/Pretrain/subfolderdict.json')
-parser.add_argument('--gamma',type=float,default=0)
-parser.add_argument('--use_temp', action="store_true", help='use temperature scheduling for attention')
-parser.add_argument('--use_temp_off', dest='use_temp', action='store_false')
-parser.add_argument('--pooling', type=str, default='attention', help='aggregation method of model')
+parser.add_argument('--pooling', type=str, default='attention', help='aggregation method of model, choose from mean, attention, max')
 
-      
-#set initial and minimum temperature (only used when args.use_temp=True)
-temp = 3.
-temp_min = 1.
-anneal_rate = 1e-6
 
 def main():
     #-------Environment
@@ -83,13 +63,13 @@ def main():
     print('the result dir is: ', result_path)
     os.mkdir(result_path)
     if args.pretrain=='imagenet':
-        model_name = str(args.CNN) + 'freeze'+str(args.freeze) + 'AT' + str(args.A) + 'lr' + str(args.lr)[2:] + 'epoch'+str(args.n_epoch)+ \
-                 'patch' + str(args.patch_n) + 'pos' + str(args.positive_n) + 'neg' + str(args.negative_n)+\
-                 'balance'+str(args.balance) + 'imagenet'+'_'+str(args.notes)
+        model_name = str(args.CNN) + 'Freeze'+str(args.freeze) + 'Emb' + str(args.pooling) + 'lr' + str(args.lr)[2:] + 'epoch'+str(args.n_epoch)+ \
+                  'Opt'+str(args.optimizer)+'patch' + str(args.patch_n) + 'Balweight'+str(args.balance) + 'Balsample'+str(args.balance_training)+\
+                'imagenet_'+str(args.notes)
     else:
-        model_name = 'Pretrained_' + 'AT' + str(args.A) + 'lr' + str(args.lr)[2:] + 'epoch'+str(args.n_epoch)+ \
-                 'patch' + str(args.patch_n) + 'pos' + str(args.positive_n) + 'neg' + str(args.negative_n)+\
-                 'balance'+str(args.balance)+'_'+str(args.notes)
+        model_name = 'Pretrained_' + str(args.CNN) + 'Freeze'+str(args.freeze) + 'Emb' + str(args.pooling) + 'lr' + str(args.lr)[2:] + 'epoch'+str(args.n_epoch)+ \
+                  'Opt'+str(args.optimizer)+'patch' + str(args.patch_n) + 'Balweight'+str(args.balance) + 'Balsample'+str(args.balance_training)+\
+                '_'+str(args.notes)
       
     fconv = open(os.path.join(result_path, model_name)+'.csv', 'w')
     fconv.write('epoch,metric,value\n')
@@ -98,29 +78,22 @@ def main():
     #--------CNN
     print('Building Model and Optimizer')
     if args.CNN=='resnet':
-        CNN_model = Attention_Model_torch_sep.ResNet18(Freeze_Num=args.freeze)
-        attention_model = Attention_Model_torch_sep.attention(D=args.A,L=1000)
-    elif args.CNN=='densenet':
-        CNN_model = Attention_Model_torch_sep.DenseNet(Freeze_Num=args.freeze)
+        CNN_model = Models.ResNet18(Freeze_Num=args.freeze)
         if args.no_age:
-            attention_model = Attention_Model_torch_sep.attention(D=args.A,L=1024)
+            attention_model = Models.attention(D=args.A,L=1000)
         else:
-            attention_model = Attention_Model_torch_sep.attention(D=args.A,L=1025)
+            attention_model = Models.attention(D=args.A,L=1001)
+    elif args.CNN=='densenet':
+        CNN_model = Models.DenseNet(Freeze_Num=args.freeze)
+        if args.no_age:
+            attention_model = Models.attention(D=args.A,L=1024)
+        else:
+            attention_model = Models.attention(D=args.A,L=1025)
     else:
         raise Exception('choose from resnet and densenet')
     
     if args.pretrain!='imagenet':
         print('Using custom pretrained weights')
-        # past code for contrastive learning pretraining 
-#         state_dict = torch.load(args.pretrain).state_dict()
-#         new_state_dict = OrderedDict()
-#         for k, v in state_dict.items():
-#             name = k[7:] # remove `module.`
-#             new_state_dict[name] = v       
-#         CNN_model = torchvision.models.resnet18(pretrained=False)
-#         CNN_model.Linear = nn.Identity()
-#         CNN_model.load_state_dict(new_state_dict)
-#         attention_model = Attention_Model_torch_sep.attention(D=args.A,L=1000)
         file_list = os.listdir(args.pretrain)
         model0_name = [file for file in file_list if 'vlossCNN' in file][0]
         model1_name = [file for file in file_list if 'vlossAT' in file][0]
@@ -169,9 +142,9 @@ def main():
     else:
         loadage=True
         
-    train_dset = DataLoader_torch.Classification_Generator(df_train, y_col=args.y_col,patch_n=args.patch_n,p=0.5,positive_n=args.positive_n,negative_n=args.negative_n,
+    train_dset = DataLoader_torch.Classification_Generator(df_train, y_col=args.y_col,patch_n=args.patch_n,p=0.5,
                                             ColorAugmentation=args.color,spatial_sample=False,loadage=loadage)
-    vali_dset = DataLoader_torch.Classification_Generator(df_vali, patch_n=args.patch_n,y_col=args.y_col,p=0,positive_n=args.positive_n,negative_n=args.negative_n,
+    vali_dset = DataLoader_torch.Classification_Generator(df_vali, patch_n=args.patch_n,y_col=args.y_col,p=0,
                                             ColorAugmentation=False,spatial_sample=False,loadage=loadage)
         
     if args.loader_mode == 'weights':
@@ -186,11 +159,11 @@ def main():
         train_dset = DataLoader_torch.weighted_sample_generator(dataframe=df_train, dataframe_weights=df_weight,subfolderdict=d,
                                                                 patch_n=args.patch_n,gamma=args.gamma,
                                                                 ColorAugmentation=True,
-                                                                spatial_sample=False)
+                                                                spatial_sample=args.spatial_sample)
         vali_dset = DataLoader_torch.weighted_sample_generator(dataframe=df_vali, dataframe_weights=df_weight,subfolderdict=d,
                                                                 patch_n=200,gamma=args.gamma,
                                                                 ColorAugmentation=False,
-                                                                spatial_sample=False)
+                                                                spatial_sample=args.spatial_sample)
    
 
     train_loader = torch.utils.data.DataLoader(
@@ -221,11 +194,13 @@ def main():
     
     for epoch in range(1,args.n_epoch+1):
             
-        loss,acc= train(epoch,model=[CNN_model,attention_model],train_loader=train_loader,optimizer=optimizer,
+        loss,acc= train(epoch,model=[CNN_model,attention_model],
+                        train_loader=train_loader,optimizer=optimizer,
                         device0=device0,device1=device1,
                         freeze_bn=args.freeze_batchnorm,freeze_CNN_model=args.freeze_CNN_model,
                        withage=loadage)
-        vloss, vacc, vauc = validation(epoch,model=[CNN_model,attention_model],val_loader=val_loader,  
+        vloss, vacc, vauc = validation(epoch,model=[CNN_model,attention_model],
+                                       val_loader=val_loader,  
                                    device0=device0,device1=device1,
                                       withage=loadage)
         print('finished one validation')
@@ -252,9 +227,6 @@ def main():
             torch.save(attention_model, os.path.join(result_path, model_name) + '_vaccAT.pt')
 
 def train(epoch, model, train_loader, optimizer, device0, device1, freeze_bn, freeze_CNN_model, withage=False):
-    global temp
-    global temp_min
-    global anneal_rate
     
     print('Epoch' + str(epoch) + 'starts:')
     model0, model1 = model
@@ -271,11 +243,7 @@ def train(epoch, model, train_loader, optimizer, device0, device1, freeze_bn, fr
     if withage:
         for batch_idx, (data, label, age) in enumerate(train_loader):
             age = torch.from_numpy(np.array([[age]])).to(device1)
-        # update temperature
-            if args.use_temp:
-                temp = np.maximum(temp * np.exp(-anneal_rate * batch_idx), temp_min)
-            else:
-                temp = 1
+        
         # reset gradients
             optimizer.zero_grad()
         #prepare data
@@ -293,10 +261,10 @@ def train(epoch, model, train_loader, optimizer, device0, device1, freeze_bn, fr
             embed = torch.cat((embed,age),dim=1)
         
         # calculate loss and metrics
-            ypred, yhat, _ = model1(embed, temp=temp, pooling=args.pooling)
-            loss = Attention_Model_torch_sep.Loss(y_pred=ypred,y_true=bag_label,balance=args.balance).to(device1)
+            ypred, yhat, _ = model1(embed,  pooling=args.pooling)
+            loss = Models.Loss(y_pred=ypred,y_true=bag_label,balance=args.balance).to(device1)
             train_loss += loss.item()
-            acc= Attention_Model_torch_sep.ACC(yhat,bag_label)
+            acc= Models.ACC(yhat,bag_label)
             train_acc += acc
         # backward pass
             loss.backward()
@@ -309,11 +277,7 @@ def train(epoch, model, train_loader, optimizer, device0, device1, freeze_bn, fr
       
     else:
         for batch_idx, (data, label) in enumerate(train_loader):
-        # update temperature
-            if args.use_temp:
-                temp = np.maximum(temp * np.exp(-anneal_rate * batch_idx), temp_min)
-            else:
-                temp = 1
+    
         # reset gradients
             optimizer.zero_grad()
         #prepare data
@@ -329,9 +293,9 @@ def train(epoch, model, train_loader, optimizer, device0, device1, freeze_bn, fr
             embed = torch.cat(embed,dim=0)
         # calculate loss and metrics
             ypred, yhat, _ = model1(embed, temp=temp, pooling=args.pooling)
-            loss = Attention_Model_torch_sep.Loss(y_pred=ypred,y_true=bag_label,balance=args.balance).to(device1)
+            loss = Models.Loss(y_pred=ypred,y_true=bag_label,balance=args.balance).to(device1)
             train_loss += loss.item()
-            acc= Attention_Model_torch_sep.ACC(yhat,bag_label)
+            acc= Models.ACC(yhat,bag_label)
             train_acc += acc
         # backward pass
             loss.backward()
@@ -377,9 +341,9 @@ def validation(epoch, model, val_loader, device0, device1,withage=False):
                 embed = torch.cat((embed,age),dim=1)
             # calculate loss and metrics
                 ypred, yhat, _ = model1(embed, temp=temp, pooling=args.pooling)
-                loss = Attention_Model_torch_sep.Loss(y_pred=ypred,y_true=bag_label,balance=args.balance).to(device1)
+                loss = Models.Loss(y_pred=ypred,y_true=bag_label,balance=args.balance).to(device1)
                 vali_loss += loss.item()
-                acc= Attention_Model_torch_sep.ACC(y_pred=yhat, y_true=bag_label)
+                acc= Models.ACC(y_pred=yhat, y_true=bag_label)
                 vali_acc += acc
                 auc_ypred.append(ypred)
         else:
@@ -398,9 +362,9 @@ def validation(epoch, model, val_loader, device0, device1,withage=False):
                 embed = torch.cat(embed,dim=0)
             # calculate loss and metrics
                 ypred, yhat, _ = model1(embed, temp=temp, pooling=args.pooling)
-                loss = Attention_Model_torch_sep.Loss(y_pred=ypred,y_true=bag_label,balance=args.balance).to(device1)
+                loss = Models.Loss(y_pred=ypred,y_true=bag_label,balance=args.balance).to(device1)
                 vali_loss += loss.item()
-                acc= Attention_Model_torch_sep.ACC(y_pred=yhat, y_true=bag_label)
+                acc= Models.ACC(y_pred=yhat, y_true=bag_label)
                 vali_acc += acc
                 auc_ypred.append(ypred)
                 
