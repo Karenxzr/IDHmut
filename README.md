@@ -1,6 +1,6 @@
 # IDHmut
 <p align="center">
-  <img src="/Figures/Picture1.png" width="350" title="workflow">
+  <img src="/Figures/Picture1.png" width="600" title="workflow">
 </p>
 
 ## 1. Tiling Slides
