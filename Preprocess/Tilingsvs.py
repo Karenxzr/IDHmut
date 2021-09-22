@@ -188,7 +188,7 @@ def tiling_qualified_separate_20x(svspath,targetpath,tilesize,stride, tissuepct_
         for h in range(step_num_h):
             sub_img = thumbnail[int(h * stride_small):int(h * stride_small + tilesize_small),int(w * stride_small):int(w * stride_small + tilesize_small), :]
             # QC
-            if filter.tissue_pct(sub_img) > tissuepct_value #and filter.h_score(sub_img)>h_value:
+            if filter.tissue_pct(sub_img) > tissuepct_value: #and filter.h_score(sub_img)>h_value:
                 x = int((w * stride + offset)* downscale_factor)
                 y = int((h * stride + offset)* downscale_factor)
                 tile_coord.append((x, y))
