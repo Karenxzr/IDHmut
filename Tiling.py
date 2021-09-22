@@ -6,12 +6,6 @@ import re
 from multiprocessing import Pool
 from Preprocess import manage
 
-def none_or_str(value):
-    if value == 'None':
-        return None
-    return value
-
-
 
 parser = argparse.ArgumentParser(description = 'Tiling SVS Files into Patches')
 #mandatory
@@ -22,7 +16,7 @@ parser.add_argument('--workers',type=int,default=8)
 parser.add_argument('--tilesize',type=int,default=256)
 parser.add_argument('--stride',type=int,default=256)
 parser.add_argument('--tissuepct_value',type=int,default=0.7)
-parser.add_argument('--magnification',type=str)
+parser.add_argument('--magnification',action="store")
 
 def tiling(svspath,patientid,targetpath,tilesize=256,stride=256,tissuepct_value=0.7,magnification=None):
     """
