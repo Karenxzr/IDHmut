@@ -53,7 +53,6 @@ def get_slide_prediction(model0_path, model1_path, dataframe, key_word='Test',y_
     return tensorlist2array(y_true), tensorlist2array(y_pred), list(path)
 
 
-###TODO
 def get_patch_only_prediction(model0_path, model1_path, dataframe, row_slice=-1, key_word='Train',y_col='IDH'):
     
     device0 = torch.device("cuda:0")
@@ -184,6 +183,7 @@ def get_patch_prediction(model0_path, model1_path, dataframe, row_slice=-1, key_
             patch_list.append(path)
             patch_pred.append(patch_pred_)
     return y_true, y_pred, y_attention, patch_list, patch_pred, slide_path
+
 
 def save_model_performance_matrix(Model_Folder, df_path, by='acc',key_word='Test',y_col='IDH'):
     #set key_word to None when evaluate the whole dataframe
