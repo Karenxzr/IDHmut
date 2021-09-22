@@ -1,5 +1,6 @@
 # IDHmut
-<p align="center">
+Example workflow for predict IDH mutation status from histopathological whole slide images (WSI) using deep learning.
+<p align="left">
   <img src="/Figures/Picture1.png" width="600" title="workflow">
 </p>
 
