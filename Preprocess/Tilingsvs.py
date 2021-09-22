@@ -181,7 +181,7 @@ def tiling_qualified_separate_20x(svspath,targetpath,tilesize,stride, tissuepct_
     if offset>0:
         thumbnail = thumbnail[int(offset/upscale_factor):-int(offset/upscale_factor),int(offset/upscale_factor):-int(offset/upscale_factor),:]
     #estimate h score
-    h_value = min(round(filter.h_score(thumbnail)*h_factor,2),0.5)
+    #h_value = min(round(filter.h_score(thumbnail)*h_factor,2),0.5)
 
     tile_coord = []  # record coordinates at level 0 scale
     for w in range(step_num_w):
