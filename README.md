@@ -5,11 +5,11 @@ Example workflow for predict IDH mutation status from histopathological whole sl
 </p>
 
 ## 1. Tiling Slides
-The first step is to tile slides into patches and store patches into specified folder. A csv file with two columns ('SVS_Path','PatientID') is required to store svs file paths and IDs. See csv folder for example file for --df_path argument.
+The first step is to tile the slides into patches and store them into specified folder. A csv file with two columns ('SVS_Path','PatientID') is required to store svs file paths and IDs. See csv folder for example file for --df_path argument.
 
 User has to assign two arguments: --df_path and --target_path
 
-Example command:
+### Basic command:
 
 `python3 Tiling.py --df_path '/path/to/csv/tilingslides.csv' --target_path '/root/folder/path/for/tiles' `
 
@@ -23,24 +23,24 @@ Some optional arguments:
 
 '--tissuepct_value',type=int,default=0.7 (for quality control)
 
-'--magnification',type=str,default='multi' (when leave it as default 2.5x, 5x,10x,20x will all be tiled, otherwise assign one target magnification)
+'--magnification',type=str,default='multi' (by default 2.5x, 5x, 10x, 20x will all be tiled, otherwise assign one target magnification). Note that for training, tiles from a specific magnification will be used. It is recommended to examine the validation performance using different magnifications to choose the optimal one. 
 
-Example command: (will tile 2.5x patches with tissue percentage over 50%)
+### Example: (will tile 2.5x patches with tissue percentage over 50%)
 
 `python3 Tiling.py --df_path '/path/to/csv/file.csv' --target_path '/root/folder/path/for/tiles'  --tissuepct_value 0.5 --magnification '2.5x'`
 
 
-## 2. Training Model
+## 2. Model Training
 
 After tiling the slides, we can start training models. 
 
-Prepare a csv file for --df_path is required. Example can be found in csv folder with name of training.csv. Basically, three columns are required: 1. label column, use --y_col to assign label name; 2. 'Path': paths for storing all tiles from each slide; 3. 'Train_Test': containing values of 'Train'/'Validation'/'Test'. Train and Validation are required.
+Prepare a csv file for --df_path is required. Example can be found in csv folder with name of `training.csv`. Basically, three columns are required: 1. label column, use `--y_col` to assign label name; 2. 'Path': paths for the tiles generated from each slide in the previous step; 3. 'Train_Test': containing values of 'Train'/'Validation'/'Test'. Train and Validation are required.
 
 Some important arguments:
 
-'--result_dir', type=str': folder path for save model
+'--result_dir', type=str': folder path for saving the model
 
-'--df_path': path to meta data
+'--df_path': path to the training meta data
 
 '--gpu': at least two gpus are required, default is '0,1,2,3'
 
@@ -52,7 +52,7 @@ Some important arguments:
 
 '--CNN' choose from resnet and densenet
 
-'--y_col' label name shown in csv file
+'--y_col' label name in the csv file
 
 '--freeze_batchnorm' suggest to set this for more stable results
 
@@ -60,9 +60,9 @@ Some important arguments:
 
 '--A' if set pooling as attention, set a number to A for number of nodes in attention network. Default is 16.
 
-Example Codes:
+### Example Codes:
 
 `python3 Train.py --result_dir ‘/path/for/model’ --df_path ‘/path/to/training.csv’ --workers 16 --CNN densenet --no_age --patch_n 200 --spatial_sample_off --n_epoch 100 --lr 0.00001 --optimizer Adam --use_scheduler --balance 0.5 --balance_training --freeze_batchnorm --pooling mean --notes model0`
 
-## 3. Evaluate Model
+## 3. Model Evaluation
 `python3 Evaluation.py`
