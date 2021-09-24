@@ -66,3 +66,54 @@ Some important arguments:
 
 ## 3. Model Evaluation
 `python3 Evaluation.py`
+
+
+# Instructions for using GPU and computational clusters
+## 1. Create a conda environemnt:
+`conda env create N` where N is the name of your environment
+
+## 2. Activate the enviroment:
+`conda activate N` where N is the name of your conda environment
+
+## 2. Install necessary packages (to be updated)
+
+## 3. Install cuda:
+`conda install cudatoolkit`
+
+## 4. Download and install cuDNN by following these [instructions](https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html)
+
+## 5. Untar the downloaded cuDNN folder then move its contents to the conda library:
+`cp cuda/include/cudnn*.h /path/to/your/environment/include`
+`cp cuda/lib64/libcudnn* /path/to/your/environment/lib`
+
+## 6. Example submission script for training using 2 GPUs on SLURM:
+
+`
+#! /bin/bash -l
+#SBATCH --partition=panda-gpu
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=15
+#SBATCH --job-name=training
+#SBATCH --time=1-00:00:00
+#SBATCH --mem=64G
+#SBATCH --gres=gpu:2
+
+source ~/.bashrc
+
+conda activate /path/to/your/environment
+
+python3 code/Train.py --result_dir 'data/model/' --df_path 'MetaData_training.csv' --workers 15 --CNN densenet --no_age --y_col 'Gleason_HighLow' --patch_n 200 --spatial_sample_off --n_epoch 100 --lr 0.00001 --optimizer Adam --use_scheduler --balance 0.5 --balance_training --freeze_batchnorm --pooling mean --notes model0 --gpu 2
+`
+
+
+  
+
+
+
+
+
+
+  
+
+
