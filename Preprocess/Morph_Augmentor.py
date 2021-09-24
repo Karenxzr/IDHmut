@@ -1,8 +1,10 @@
+import sys
+sys.path.insert(0, 'IDHmut/')
 import numpy as np
 import random
 import math
-import manage 
-import coloraugmentation as CN
+from Preprocess import manage
+from Preprocess import coloraugmentation as CN
 
 
 
