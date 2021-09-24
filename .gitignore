@@ -1,1 +1,5 @@
 *.pyc
+Evaluation.py
+LICENSE
+.DS_Store
+.gitignore
