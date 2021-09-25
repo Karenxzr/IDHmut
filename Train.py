@@ -61,7 +61,7 @@ def main():
     device1 = torch.device("cuda:1")
     result_path = os.path.join(args.result_dir, str(datetime.datetime.now())[0:19])
     print('the result dir is: ', result_path)
-    os.mkdir(result_path)
+    os.makedirs(result_path)
     if args.pretrain=='imagenet':
         model_name = str(args.CNN) + 'Freeze'+str(args.freeze) + 'Emb' + str(args.pooling) + 'lr' + str(args.lr)[2:] + 'epoch'+str(args.n_epoch)+ \
                   'Opt'+str(args.optimizer)+'patch' + str(args.patch_n) + 'Balweight'+str(args.balance) + 'Balsample'+str(args.balance_training)+\
