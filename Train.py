@@ -260,6 +260,7 @@ def train(epoch, model, train_loader, optimizer, device0, device1, freeze_bn, fr
       
     else:
         for batch_idx, (data, label) in enumerate(train_loader):
+            print('loaded')
     
         # reset gradients
             optimizer.zero_grad()
