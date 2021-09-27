@@ -56,8 +56,8 @@ def main():
     #-------Environment
     global args
     args = parser.parse_args()
-    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
+    #os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+    #os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
     device0 = torch.device("cuda:0")
     device1 = torch.device("cuda:1")
     result_path = os.path.join(args.result_dir, str(datetime.datetime.now())[0:19])
