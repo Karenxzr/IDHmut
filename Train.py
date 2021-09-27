@@ -49,7 +49,8 @@ parser.add_argument('--freeze_batchnorm_off',action='store_false',dest='freeze_b
 parser.add_argument('--freeze_CNN_model',action='store_true')
 parser.add_argument('--freeze_CNN_model_off',dest = 'freeze_CNN_model',action='store_false')
 parser.add_argument('--pooling', type=str, default='attention', help='aggregation method of model, choose from mean, attention, max')
-
+parser.add_argument('--loader_mode',type=str,default='classification', help='set to pyramid for zoom in, set to weights '
+                                                                            'for weigted sampling')
 
 def main():
     #-------Environment
@@ -177,7 +178,8 @@ def main():
     if args.balance_training:
         class_sample_count = np.array([len(np.where(df_train[args.y_col] == t)[0]) for t in np.unique(df_train[args.y_col])])
         weight = 1. / class_sample_count
-        sample_weights=np.array([weight[t] for t in df_train[args.y_col]])
+        weight = pd.DataFrame(weight.flatten(), index=list(np.unique(df_train[args.y_col])))
+        sample_weights=np.array([weight.loc[t] for t in df_train[args.y_col]])
         sample_weights = torch.from_numpy(sample_weights)
         sample_weights = sample_weights.double()
         sampler = torch.utils.data.WeightedRandomSampler(weights = sample_weights,  num_samples = int(class_sample_count.min()*2),replacement=False)
