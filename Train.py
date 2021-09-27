@@ -169,6 +169,7 @@ def main():
         train_dset,batch_size=args.batch_size, shuffle=False,
         num_workers=args.workers, pin_memory=True,sampler=sampler)
         print('Balance Training Weighted Sampler Used')
+        print(weight)
 
     #--------Loop Epoch
     print('Start Training:')
