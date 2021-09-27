@@ -7,19 +7,9 @@ from Preprocess import manage
 from Preprocess import coloraugmentation as CN
 
 
-
-
-def Augmentation_from_Folder(FolderPath, target_w,target_h, p_flip=0.5, p_rotate=0.5,
-                             samples = 0, sigma=0.05,spatial_sample=False,
-                             ColorAugmentation = True,
-                             GPU_num=4, oversample = False, png=False):
-    '''
-    put one patient's folder in, output 4d array with augmentations
-    :param FolderPath:
-    :param ColorAugmentation:
-    :param samples: when samples are 0, random sample all the patches in the folder, when sample is and int, fix sample number
-    :return: 4d array
-    '''
+def augmentation_from_folder_heavy(FolderPath, target_w,target_h, p_flip=0.5, p_rotate=0.5,p_blur=0.3,
+                             samples = 0, sigma=0.1,ColorAugmentation = True,spatial_sample=False,KeepPath=False):
+    
     alpha0 = np.random.uniform(1 - sigma, 1 + sigma)
     beta0 = np.random.uniform(-sigma, sigma)
     alpha1 = np.random.uniform(1 - sigma, 1 + sigma)
@@ -27,30 +17,19 @@ def Augmentation_from_Folder(FolderPath, target_w,target_h, p_flip=0.5, p_rotate
     alpha2 = np.random.uniform(1 - sigma, 1 + sigma)
     beta2 = np.random.uniform(-sigma, sigma)
 
-    if png:
-        path = manage.list_png(FolderPath)
-    else:
-        path = manage.list_npy(FolderPath)
 
+    path = manage.list_npy(FolderPath)
     n_img = len(path)
-    if samples==0:
-        samples = math.ceil(n_img/GPU_num)*GPU_num
-    if samples>n_img:
-        if oversample:
-            path = random.choices(path, k=samples)  
+    if samples>0:
+        if samples>n_img:
+            path = random.choices(path, k=samples)
         else:
-            path = path
-    else:
-        path = random.sample(path, k=samples)
-        
+            path = random.sample(path, k= samples)
     n_img = len(path)
+
     out = np.zeros((n_img, target_h, target_w, 3))
     for i in range(n_img):
-        if png:
-            img = Image.open(path[i])
-            img = np.array(img)[...,:3]
-        else:
-            img = np.load(path[i])
+        img = np.load(path[i])
         if target_h<img.shape[0] or target_h<img.shape[1]:
             if spatial_sample:
                 img = img_crop(img,target_w=target_w,target_h=target_h)
@@ -60,13 +39,22 @@ def Augmentation_from_Folder(FolderPath, target_w,target_h, p_flip=0.5, p_rotate
             img = img_flip(img)
         if np.random.uniform(0,1)>p_rotate:
             img = img_rotate(img)
-        #augmentation
         if ColorAugmentation:
-            img = CN.color_augmentation(img,alpha0=alpha0, beta0=beta0,
-                                            alpha1=alpha1, beta1=beta1,
-                                            alpha2=alpha2, beta2=beta2)
+            img = ColorNormalization.color_augmentation(img,
+                                                  alpha0=alpha0, beta0=beta0,
+                                                  alpha1=alpha1, beta1=beta1,
+                                                  alpha2=alpha2, beta2=beta2)
+        if np.random.uniform(0,1)>p_blur:
+            img = Blur(img)
         out[i,...] = img
-    return out
+        
+    if KeepPath:
+        return path, out
+    else:
+        return out
+
+
+
 
 
 
