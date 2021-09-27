@@ -75,10 +75,11 @@ Some important arguments:
 ## 2. Activate the enviroment:
 `conda activate N` where N is the name of your conda environment
 
-## 2. Install necessary packages (to be updated)
+## 2. Check the cuda version compatible with the driver
+nvidia-smi
 
-## 3. Install cuda:
-`conda install cudatoolkit`
+## 3. Install the correct cuda and pytorch:
+`conda install pytorch torchvision cudatoolkit=11.0 -c pytorch`
 
 ## 4. Download and install cuDNN by following these [instructions](https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html)
 
