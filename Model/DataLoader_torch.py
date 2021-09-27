@@ -42,13 +42,16 @@ class Classification_Generator(data_utils.Dataset):
                                                                p_flip=self.p,p_rotate=self.p, samples=self.patch_n,
                                                                    sigma=self.sigma,ColorAugmentation=self.color,
                                                                    spatial_sample=self.spatial,KeepPath = False)
+        if self.loadage:
             age = self.df.loc[index,'Age']
+            
         input_array /= 255
         label = np.array(self.df.loc[index, self.y_col])
         input=[]
         for i in range(len(input_array)):
             input.append(self.transform(input_array[i,...]))
         input = torch.stack(input,dim=0)
+        
         if self.KeepPath:
             return input, label, path
         elif self.loadage:
