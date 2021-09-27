@@ -49,8 +49,6 @@ parser.add_argument('--freeze_batchnorm_off',action='store_false',dest='freeze_b
 parser.add_argument('--freeze_CNN_model',action='store_true')
 parser.add_argument('--freeze_CNN_model_off',dest = 'freeze_CNN_model',action='store_false')
 parser.add_argument('--pooling', type=str, default='attention', help='aggregation method of model, choose from mean, attention, max')
-parser.add_argument('--loader_mode',type=str,default='classification', help='set to pyramid for zoom in, set to weights '
-                                                                            'for weigted sampling')
 
 def main():
     #-------Environment
@@ -148,24 +146,7 @@ def main():
     vali_dset = DataLoader_torch.Classification_Generator(df_vali, patch_n=args.patch_n,y_col=args.y_col,p=0,
                                             ColorAugmentation=False,spatial_sample=False,loadage=loadage)
         
-    if args.loader_mode == 'weights':
-        df_weight = pd.read_csv(args.dataframe_weight_path)
-        if args.subfolderdict is not None:
-            subfolderdict_path=args.subfolderdict
-            with open(subfolderdict_path) as f:
-                d = json.load(f)
-        else:
-            d = None
-            
-        train_dset = DataLoader_torch.weighted_sample_generator(dataframe=df_train, dataframe_weights=df_weight,subfolderdict=d,
-                                                                patch_n=args.patch_n,gamma=args.gamma,
-                                                                ColorAugmentation=True,
-                                                                spatial_sample=args.spatial_sample)
-        vali_dset = DataLoader_torch.weighted_sample_generator(dataframe=df_vali, dataframe_weights=df_weight,subfolderdict=d,
-                                                                patch_n=200,gamma=args.gamma,
-                                                                ColorAugmentation=False,
-                                                                spatial_sample=args.spatial_sample)
-   
+    
 
     train_loader = torch.utils.data.DataLoader(
         train_dset,batch_size=args.batch_size, shuffle=True,
