@@ -11,6 +11,7 @@ from Preprocess import coloraugmentation as CN
 
 def Augmentation_from_Folder(FolderPath, target_w,target_h, p_flip=0.5, p_rotate=0.5,
                              samples = 0, sigma=0.05,spatial_sample=False,
+                             ColorAugmentation = True,
                              GPU_num=4, oversample = False, png=False):
     '''
     put one patient's folder in, output 4d array with augmentations
@@ -60,7 +61,8 @@ def Augmentation_from_Folder(FolderPath, target_w,target_h, p_flip=0.5, p_rotate
         if np.random.uniform(0,1)>p_rotate:
             img = img_rotate(img)
         #augmentation
-        img = CN.color_augmentation(img,alpha0=alpha0, beta0=beta0,
+        if ColorAugmentation:
+            img = CN.color_augmentation(img,alpha0=alpha0, beta0=beta0,
                                             alpha1=alpha1, beta1=beta1,
                                             alpha2=alpha2, beta2=beta2)
         out[i,...] = img
