@@ -7,8 +7,8 @@ from Preprocess import manage
 from Preprocess import coloraugmentation as CN
 
 
-def augmentation_from_folder_heavy(FolderPath, target_w,target_h, p_flip=0.5, p_rotate=0.5,
-                             samples = 0, sigma=0.1,ColorAugmentation = True,spatial_sample=False,KeepPath=False):
+def Augmentation_from_Folder(FolderPath, target_w,target_h, p_flip=0.5, p_rotate=0.5,
+                             samples = 0, sigma=0.05,ColorAugmentation = True,spatial_sample=False,KeepPath=False):
     
     alpha0 = np.random.uniform(1 - sigma, 1 + sigma)
     beta0 = np.random.uniform(-sigma, sigma)
