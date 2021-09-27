@@ -160,7 +160,7 @@ def main():
         class_sample_count = np.array([len(np.where(df_train[args.y_col] == t)[0]) for t in np.unique(df_train[args.y_col])])
         weight = 1. / class_sample_count
         weight = pd.DataFrame(weight.flatten(), index=list(np.unique(df_train[args.y_col])))
-        sample_weights=np.array([weight.loc[t][0] for t in df_train[args.y_col]])
+        sample_weights=np.array([weight[t] for t in df_train[args.y_col]])
         sample_weights = torch.from_numpy(sample_weights)
         sample_weights = sample_weights.double()
         sampler = torch.utils.data.WeightedRandomSampler(weights = sample_weights,  num_samples = int(class_sample_count.min()*2),replacement=False)
