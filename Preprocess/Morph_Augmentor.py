@@ -7,7 +7,7 @@ from Preprocess import manage
 from Preprocess import coloraugmentation as CN
 
 
-def augmentation_from_folder_heavy(FolderPath, target_w,target_h, p_flip=0.5, p_rotate=0.5,p_blur=0.3,
+def augmentation_from_folder_heavy(FolderPath, target_w,target_h, p_flip=0.5, p_rotate=0.5,
                              samples = 0, sigma=0.1,ColorAugmentation = True,spatial_sample=False,KeepPath=False):
     
     alpha0 = np.random.uniform(1 - sigma, 1 + sigma)
@@ -44,8 +44,6 @@ def augmentation_from_folder_heavy(FolderPath, target_w,target_h, p_flip=0.5, p_
                                                   alpha0=alpha0, beta0=beta0,
                                                   alpha1=alpha1, beta1=beta1,
                                                   alpha2=alpha2, beta2=beta2)
-        if np.random.uniform(0,1)>p_blur:
-            img = Blur(img)
         out[i,...] = img
         
     if KeepPath:
