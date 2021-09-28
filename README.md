@@ -52,7 +52,7 @@ Some important arguments:
 
 '--CNN' choose from resnet and densenet
 
-'--y_col' label name in the csv file
+'--y_col' label name in the csv file. Values must be numeric: 0 or 1
 
 '--freeze_batchnorm' suggest to set this for more stable results
 
