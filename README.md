@@ -76,7 +76,7 @@ Some important arguments:
 `conda activate N` where N is the name of your conda environment
 
 ## 2. Check the cuda version compatible with the driver
-nvidia-smi
+`nvidia-smi`
 
 ## 3. Install the correct cuda and pytorch:
 `conda install pytorch torchvision cudatoolkit=11.0 -c pytorch`
