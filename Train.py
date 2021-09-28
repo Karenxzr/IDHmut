@@ -276,7 +276,7 @@ def train(epoch, model, train_loader, optimizer, device0, device1, freeze_bn, fr
                 embed.append(embed0)
             embed = torch.cat(embed,dim=0)
         # calculate loss and metrics
-            ypred, yhat, _ = model1(embed, temp=temp, pooling=args.pooling)
+            ypred, yhat, _ = model1(embed, pooling=args.pooling)
             loss = Models.Loss(y_pred=ypred,y_true=bag_label,balance=args.balance).to(device1)
             train_loss += loss.item()
             acc= Models.ACC(yhat,bag_label)
@@ -324,7 +324,7 @@ def validation(epoch, model, val_loader, device0, device1,withage=False):
                 age = torch.tile(age, (embed.size()[0], 1)).float()
                 embed = torch.cat((embed,age),dim=1)
             # calculate loss and metrics
-                ypred, yhat, _ = model1(embed, temp=temp, pooling=args.pooling)
+                ypred, yhat, _ = model1(embed,  pooling=args.pooling)
                 loss = Models.Loss(y_pred=ypred,y_true=bag_label,balance=args.balance).to(device1)
                 vali_loss += loss.item()
                 acc= Models.ACC(y_pred=yhat, y_true=bag_label)
@@ -345,7 +345,7 @@ def validation(epoch, model, val_loader, device0, device1,withage=False):
                     embed.append(embed0)
                 embed = torch.cat(embed,dim=0)
             # calculate loss and metrics
-                ypred, yhat, _ = model1(embed, temp=temp, pooling=args.pooling)
+                ypred, yhat, _ = model1(embed, pooling=args.pooling)
                 loss = Models.Loss(y_pred=ypred,y_true=bag_label,balance=args.balance).to(device1)
                 vali_loss += loss.item()
                 acc= Models.ACC(y_pred=yhat, y_true=bag_label)
