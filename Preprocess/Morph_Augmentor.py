@@ -40,7 +40,7 @@ def Augmentation_from_Folder(FolderPath, target_w,target_h, p_flip=0.5, p_rotate
         if np.random.uniform(0,1)>p_rotate:
             img = img_rotate(img)
         if ColorAugmentation:
-            img = ColorNormalization.color_augmentation(img,
+            img = CN.color_augmentation(img,
                                                   alpha0=alpha0, beta0=beta0,
                                                   alpha1=alpha1, beta1=beta1,
                                                   alpha2=alpha2, beta2=beta2)
