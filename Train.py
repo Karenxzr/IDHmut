@@ -13,6 +13,7 @@ import datetime
 import sklearn
 import json
 import torch.nn.functional as F
+from sklearn.metrics import roc_auc_score
 
 parser = argparse.ArgumentParser(description='ATTENTION DENSENET MODEL')
 parser.add_argument('--result_dir', type=str, default='/nfs03/data/TCGA_Brain/Results/TCGA2.5Classifier/')
@@ -355,7 +356,7 @@ def validation(epoch, model, val_loader, device0, device1,withage=False):
         # calculate loss and error for epoch
         vali_loss /= len(val_loader)
         vali_acc /= len(val_loader)
-        vali_auc = sklearn.metrics.roc_auc_score(y_true=auc_ytrue,y_score=auc_ypred)
+        vali_auc = roc_auc_score(y_true=auc_ytrue,y_score=auc_ypred)
         print('Epoch: {}, Validation Loss: {:.4f}, Validation accuracy: {:.4f}, Validation auc: {:.4f}'.format(epoch, vali_loss, vali_acc, vali_auc))
         return vali_loss, vali_acc, vali_auc
 
