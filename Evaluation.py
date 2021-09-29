@@ -251,8 +251,8 @@ def Model_Evaluation(Model_Folder, df_path, by='loss',keyword = 'Test',patch_n=0
 def main():
     global args
     args = parser.parse_args()
-    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
+    #os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+    #os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
     device0 = torch.device("cuda:0")
     device1 = torch.device("cuda:1")
     if args.no_age:
