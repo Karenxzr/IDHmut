@@ -1,5 +1,5 @@
 import torch
-import DataLoader_torch
+from Model import DataLoader_torch
 import pandas as pd
 import numpy as np
 import os
