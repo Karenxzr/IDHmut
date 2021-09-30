@@ -65,7 +65,7 @@ Some important arguments:
 `python3 Train.py --result_dir ‘/path/for/model’ --df_path ‘/path/to/training.csv’ --workers 16 --CNN densenet --no_age --patch_n 200 --spatial_sample_off --n_epoch 100 --lr 0.00001 --optimizer Adam --use_scheduler --balance 0.5 --balance_training --freeze_batchnorm --pooling mean --notes model0`
 
 ## 3. Model Evaluation
-`python3 Evaluation.py`
+`python3 code/Evaluation.py --df_path 'path/to/dataframe/' --y_col='IDH' --Model_Folder 'path/to/your/trained/model' --key_word 'Test' --no_age --two_forward_off`
 
 
 # Instructions for using GPU and computational clusters
