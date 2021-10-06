@@ -5,6 +5,7 @@ import numpy as np
 from Preprocess import filter
 import matplotlib.pyplot as plt
 from skimage.transform import resize
+import openslide
 
 
 parser = argparse.ArgumentParser(description='Generate Prediction Map')
