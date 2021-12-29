@@ -96,6 +96,7 @@ def get_patch_only_prediction(model0_path, model1_path, dataframe, row_slice=-1,
         for i in range(len(data)):
             data0=data[i,...]
             data0 = data0.to(device0).float()
+            print(data0.shape)
             patch_x = model0(data0).to(device1)
             patch_y, _, patch_att = model1(patch_x)
             
