@@ -103,6 +103,7 @@ def get_patch_only_prediction(model0_path, model1_path, dataframe, row_slice=-1,
             
             patch_y=patch_y.item()
             patch_att=patch_att.item()
+            print(patch_x)
             #patch_x = list(tensorlist2array(patch_x))
             patch_pred_.append(patch_y)
             patch_att_.append(patch_att)
