@@ -160,6 +160,7 @@ def get_patch_prediction(model0_path, model1_path, dataframe, row_slice=-1, key_
 
         for batch_idx, (data, label, path) in enumerate(test_loader):
             patch_pred_=[]
+            embed_list_=[]
             #path is a list cooresponding to 'batch' each dimension of data
             label = label[0].to(device0).float()
             data = data.squeeze(0).float()
@@ -176,6 +177,7 @@ def get_patch_prediction(model0_path, model1_path, dataframe, row_slice=-1, key_
                 patch_x = embed[em_i,...].unsqueeze(dim=0)
                 patch_y,_,_ = model1(patch_x)
                 patch_y=patch_y.item()
+                embed_list_.append(patch_x)
                 patch_pred_.append(patch_y)
 
             pred, yhat, attention = model1(embed)
@@ -190,7 +192,8 @@ def get_patch_prediction(model0_path, model1_path, dataframe, row_slice=-1, key_
             y_attention.append(attention)
             patch_list.append(path)
             patch_pred.append(patch_pred_)
-    return y_true, y_pred, y_attention, patch_list, patch_pred, slide_path
+            embed_list.append(embed_list_)
+    return y_true, y_pred, y_attention, patch_list, patch_pred, slide_path, embed_list
 
 
 def save_model_performance_matrix(Model_Folder, df_path, by='acc',key_word='Test',y_col='IDH',patch_n=0):
