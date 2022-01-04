@@ -157,6 +157,7 @@ def get_patch_prediction(model0_path, model1_path, dataframe, row_slice=-1, key_
         y_attention = []
         patch_list = []
         patch_pred = []
+        embed_list = [] 
 
         for batch_idx, (data, label, path) in enumerate(test_loader):
             patch_pred_=[]
@@ -239,6 +240,6 @@ def save_patch_prediction_to_dataframe(Model_Folder, df_path, by='loss',row_slic
         patch_attention, patch_list, patch_pred, slide_path,patch_embedding = get_patch_only_prediction(model0_path, model1_path, dataframe,row_slice=row_slice, key_word=key_word,y_col=y_col,patch_n=patch_n)
         df = pd.DataFrame({'attention_weights': patch_attention, 'patch_name': patch_list, 'patch_pred': patch_pred,'slide_path': slide_path,'patch_embedding': patch_embedding})
     else:
-        y_true, y_pred, y_attention, patch_list, patch_pred, slide_path = get_patch_prediction(model0_path, model1_path, dataframe,row_slice=row_slice, key_word=key_word,y_col=y_col,patch_n=patch_n)
-        df = pd.DataFrame({'y_true':y_true, 'y_pred':y_pred, 'attention_weights': y_attention, 'patch_name': patch_list, 'patch_pred': patch_pred,'slide_path': slide_path})
+        y_true, y_pred, y_attention, patch_list, patch_pred, slide_path, embed_list = get_patch_prediction(model0_path, model1_path, dataframe,row_slice=row_slice, key_word=key_word,y_col=y_col,patch_n=patch_n)
+        df = pd.DataFrame({'y_true':y_true, 'y_pred':y_pred, 'attention_weights': y_attention, 'patch_name': patch_list, 'patch_pred': patch_pred,'slide_path': slide_path, 'embed_list':embed_list})
     return df
