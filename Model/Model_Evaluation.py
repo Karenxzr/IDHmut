@@ -24,7 +24,7 @@ def get_slide_prediction(model0_path, model1_path, dataframe, key_word='Test',y_
 
     path = list(df_test['Path'])
 
-    test_dset = DataLoader_torch.Classification_Generator(df_test, patch_n=0, p=0,y_col=y_col,
+    test_dset = DataLoader_torch.Classification_Generator(df_test, patch_n=patch_n, p=0,y_col=y_col,
                                                ColorAugmentation=False,spatial_sample=False,
                                                           KeepPath = False)
     test_loader = torch.utils.data.DataLoader(test_dset, batch_size=1, shuffle=False,
