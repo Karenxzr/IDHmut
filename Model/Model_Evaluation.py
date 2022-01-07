@@ -10,7 +10,7 @@ def tensorlist2array(input):
     output = [i.item() for i in input]
     return np.array(output)
 
-def get_slide_prediction(model0_path, model1_path, dataframe, key_word='Test',y_col='IDH'):
+def get_slide_prediction(model0_path, model1_path, dataframe, key_word='Test',y_col='IDH',patch_n=0):
     device = torch.device("cuda:0")
     model0 = torch.load(model0_path, map_location=device)
     model1 = torch.load(model1_path, map_location=device)
@@ -242,4 +242,5 @@ def save_patch_prediction_to_dataframe(Model_Folder, df_path, by='loss',row_slic
     else:
         y_true, y_pred, y_attention, patch_list, patch_pred, slide_path, embed_list = get_patch_prediction(model0_path, model1_path, dataframe,row_slice=row_slice, key_word=key_word,y_col=y_col,patch_n=patch_n)
         df = pd.DataFrame({'y_true':y_true, 'y_pred':y_pred, 'attention_weights': y_attention, 'patch_name': patch_list, 'patch_pred': patch_pred,'slide_path': slide_path, 'embed_list':embed_list})
+        print(df)
     return df
