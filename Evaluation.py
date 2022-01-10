@@ -266,6 +266,7 @@ def main():
     elif args.action=='patch':
         df = ME.save_patch_prediction_to_dataframe(args.Model_Folder, args.df_path,by=args.by,row_slice = args.row_slice,
                                                    key_word=args.key_word,y_col=args.y_col,light_mode=args.light_mode,patch_n=args.patch_n)
+        df = df.to('cpu')
         df.to_csv(os.path.join(args.Model_Folder, 'patchprediction' + str(args.by)+str(args.notes)+'.csv'))
         df.to_pickle(os.path.join(args.Model_Folder, 'patchprediction' + str(args.by)+str(args.notes)+'.pkl'))
 
