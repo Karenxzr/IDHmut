@@ -177,6 +177,7 @@ def get_patch_prediction(model0_path, model1_path, dataframe, row_slice=-1, key_
             for em_i in range(embed.shape[0]):
                 patch_x = embed[em_i,...].unsqueeze(dim=0)
                 patch_y,_,_ = model1(patch_x)
+                patch_x = patch_x.to('cpu').detach().numpy().tolist()[0]
                 patch_y=patch_y.item()
                 embed_list_.append(patch_x)
                 patch_pred_.append(patch_y)
