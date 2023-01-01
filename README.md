@@ -3,6 +3,7 @@ Example workflow for predict IDH mutation status from histopathological whole sl
 <p align="left">
   <img src="/Figures/Workflow.png" width="600" title="workflow">
 </p>
+Liechty, B., Xu, Z., Zhang, Z. et al. Machine learning can aid in prediction of IDH mutation from H&E-stained histology slides in infiltrating gliomas. Sci Rep 12, 22623 (2022). https://doi.org/10.1038/s41598-022-26170-6
 
 ## 1. Tiling Slides
 The first step is to tile the slides into patches and store them into specified folder. A csv file with two columns ('SVS_Path','PatientID') is required to store svs file paths and IDs. See csv folder for example file for --df_path argument.
